@@ -1,0 +1,45 @@
+pkgname=firmware-mecha-comet-m
+pkgver=1
+pkgrel=1
+_fw_ver="pmos-6.6"
+pkgdesc="Firmware for the Mecha Comet M"
+url="https://github.com/Ersa-Studios/linux-mecha-firmware"
+arch="aarch64"
+license="proprietary"
+options="!check !strip !archcheck !tracedeps pmb:cross-native"
+source="linux-mecha-firmware.tar.gz::$url/archive/refs/tags/$_fw_ver.tar.gz"
+builddir="$srcdir/linux-mecha-firmware-$_fw_ver"
+
+package() {
+	mkdir -p "$pkgdir/lib/firmware/postmarketos"
+
+	# Broadcom firmware
+	install -Dm644 "$builddir/firmware/brcm/BCM4345C0.1MW.hcd" \
+		"$pkgdir"/lib/firmware/postmarketos/BCM4345C0.1MW.hcd
+	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.bin" \
+                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.bin
+	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.bin"	\
+		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.bin
+	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.txt" \
+                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.txt
+	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.clm_blob" \
+                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.clm_blob
+        install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.clm_blob" \
+                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.clm_blob
+
+	# Regulatory Databases
+	install -Dm644 "$builddir/firmware/brcm/regulatory.db" \
+		"$pkgdir"/lib/firmware/postmarketos/brcm/regulatory.db
+	install -Dm644 "$builddir/firmware/brcm/regulatory.db.p7s" \ 
+                "$pkgdir"/lib/firmware/postmarketos/brcm/regulatory.db.p7s
+
+	# IMX SDMA
+	cp -r "$builddir/firmware/imx" "$pkgdir/lib/firmware/postmarketos"
+
+	# HDA firmware
+	cp -r "$builddir/firmware/skl_hda_dsp_generic-tplg.bin" "$pkgdir/lib/firmware/postmarketos"
+}
+
+sha512sums="
+a1a4a9d27b8de268f65f81445d93634901c98c8b07f838aa97011801208324b13d58d6d09e4cc271c69f98063128baa5738ad66c5c06f7c8b840d9728b76ea5e  linux-mecha-firmware.tar.gz
+"
