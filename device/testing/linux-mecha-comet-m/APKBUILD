@@ -1,0 +1,65 @@
+pkgname=linux-mecha-comet-m
+pkgver=6.12.20
+pkgrel=0
+# NOTE: Don't forget to rebase the config! See prepare() for instructions.
+pkgdesc="Mecha Comet M kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="mecha-comet-m"
+url="https://github.com/pmOS-comet/linux"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	"
+makedepends="
+	bash
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	installkernel
+	openssl-dev
+	perl
+	rsync
+	xz
+	"
+install="$pkgname.post-upgrade"
+
+# Source
+_repository="linux"
+_config="config-$_flavor.$arch"
+_commit="6039f6ca5d9095b32924b62c58171b256ae98ee5"
+
+source="
+	$pkgname-linux-$pkgver.tar.gz::"$url/archive/$_commit.tar.gz"
+	$_config
+"
+builddir="$srcdir/$_repository-$_commit"
+
+prepare() {
+	default_prepare
+	REPLACE_GCCH=0 \
+		. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
+
+	make modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+
+}
+sha512sums="
+b7b2ba0614bb9bbc1cd405e9c694f62fe78a825e0482504dc92a25db89b422148ccbeb71a00182c178d465ec63e172fab3c013a93615123af0651d070eb41e00  linux-mecha-comet-m-linux-6.12.20.tar.gz
+3d65266a0d73d14c4b20f619a00666f5645fa427957554dada08d0ccedcd8aa7d75475684d86e6b21d4f791031825121b4590ebc89da0af8956b998c7e7f0367  config-mecha-comet-m.aarch64
+"

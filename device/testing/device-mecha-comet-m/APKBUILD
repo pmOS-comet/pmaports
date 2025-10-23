@@ -1,0 +1,59 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-mecha-comet-m
+pkgdesc="Mecha Systems Inc. Mecha Comet"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	alsa-ucm-conf-mecha-comet
+	bluez
+	firmware-nxp-iw61x
+	i2c-tools
+	iw
+        linux-mecha-comet-m
+	postmarketos-base
+	snapshot
+	systemd-boot
+	u-boot-mecha-comet-m
+	u-boot-tools
+"
+makedepends="devicepkg-dev u-boot-tools"
+source="
+	kernel-cmdline.conf
+	flash_script.lst
+	kernel/moal.conf
+	udev/10-imx.rules
+	wifi/10-nm-wifi.rules
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	# Install polkit and udev rules
+        install -Dm644 "$srcdir"/10-imx.rules "$pkgdir"/usr/lib/udev/rules.d/10-imx.rules
+        install -Dm644 "$srcdir"/10-nm-wifi.rules "$pkgdir"/etc/polkit-1/rules.d/10-nm-wifi.rules
+
+	# Install modules config
+	install -Dm644 "$srcdir"/moal.conf "$pkgdir"/etc/modules-load.d/moal.conf
+
+	# Setup flash script
+	install -Dm644 "$srcdir"/flash_script.lst "$pkgdir"/usr/share/uuu/flash_script.lst
+
+	devicepkg_package $startdir $pkgname
+}
+sha512sums="
+9663f3f0a0dc4bbbd8db3ddd73addbaed269b897a935612ad8f2cf31f75f75e6caeba85ccc0b96c64d244f6568788510305d3fa25751b6b2c54b3630a448b026  kernel-cmdline.conf
+7171a761666a3186e7a810d3efb32acf3b7dc89e9dc8aeff1f69e4da5584ef1c94015c38407be75d7c9a726e0ac6079d80e38904154b9dfeb01f8cee66d4af8f  flash_script.lst
+bac584f5c2d7dc2cc4359137644b78aef0df9bfcf7f144743c5d223761c82eb93e9a253d2347858fe7962545d9a322b992c9219365413d043514ca34cafc48d9  moal.conf
+65a233cbd917733aa09736e7cc81c7cc6e5ce56b0ca764ae245ee94b3773860d55f685959b49564d9010a88963738d41e062746c0c6c9dd5602ac92f45771a7f  10-imx.rules
+d1bfdd200d62a5c75fa870fc759d5212413bada5f69ddb9464ce2240afaf2ab5b9a9259236c41dcfadfb97c223b5d8f6cffe1389d795535c052f6a441d6cc8f4  10-nm-wifi.rules
+91f1aa878847367e4dcd80233a139ce04a743e75c85bdf8b937ae3d2453ec371bc093fc31e3c694a6830f7ff4abceaba28060f99ef8a566c91263af00d5ec5f1  deviceinfo
+2b1048306bf4b293d28d2e5f48fa471f500c228e3bab28e569d0bba13df1912abdde412438b5490cd662bd1a6503d6c3dd7a9c7e831cc734c869368a112ed6b8  modules-initfs
+"
