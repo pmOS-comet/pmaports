@@ -1,5 +1,5 @@
 pkgname=linux-mecha-comet-m
-pkgver=6.6.36
+pkgver=6.6.52
 pkgrel=0
 # NOTE: Don't forget to rebase the config! See prepare() for instructions.
 pkgdesc="Mecha Comet M kernel fork"
@@ -29,7 +29,7 @@ install="$pkgname.post-upgrade"
 # Source
 _repository="linux-imx"
 _config="config-$_flavor.$arch"
-_tag="postmarketOS-release-20250718"
+_tag="postmarketOS-devel-20251023-gen6"
 
 source="
 	$pkgname-linux-$pkgver.tar.gz::"$url/archive/refs/tags/$_tag.tar.gz"
@@ -60,6 +60,6 @@ package() {
 
 }
 sha512sums="
-4548ae14642c6be23ee5d97cea5ae26675b9776212887a05c887d000906ff07460dc1a755db0e9d505a646ca0d741fcb31e589cbb2a5c4ef6627d6a1c76e3d1f  linux-mecha-comet-m-linux-6.6.36.tar.gz
-087ab7ce20e9ce20b15bc9aafbea71b20306c192f7cee20fdee756048841326bd40045d9e79d7c6578f16acab89e7272df31c502119876014b9632269114e911  config-mecha-comet-m.aarch64
+7897bd53a4674cf114b650b1a21b659b4ae77ecfd6de9931ed4ead157807f2b866de11f3f24bf1f8df0c78828e2e52319ff1dd99acfe10aab98612b8747a948e  linux-mecha-comet-m-linux-6.6.52.tar.gz
+f3d4b4a66003b2d3e68fd41d46f7b12ecffa0c025fe779bff9a9bb2071aa6c900900b123a7bc6128b8e90e60deb8af777b8eb59131dac731ea0f84a2ed48ed4f  config-mecha-comet-m.aarch64
 "
