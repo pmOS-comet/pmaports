@@ -1,7 +1,7 @@
 pkgname=firmware-mecha-comet-m
 pkgver=1
 pkgrel=1
-_fw_ver="pmos-6.6"
+_fw_ver="pmos-devel-6.6.52-20251023"
 pkgdesc="Firmware for the Mecha Comet M"
 url="https://github.com/Ersa-Studios/linux-mecha-firmware"
 arch="aarch64"
@@ -33,13 +33,16 @@ package() {
 	install -Dm644 "$builddir/firmware/brcm/regulatory.db.p7s" \ 
                 "$pkgdir"/lib/firmware/postmarketos/brcm/regulatory.db.p7s
 
-	# IMX SDMA
-	cp -r "$builddir/firmware/imx" "$pkgdir/lib/firmware/postmarketos"
+	# NXP firmware
+	cp -r "$builddir/firmware/nxp" "$pkgdir/lib/firmware/postmarketos"
+
+	# IMX SDMA - unused right now
+	# cp -r "$builddir/firmware/imx" "$pkgdir/lib/firmware/postmarketos"
 
 	# HDA firmware
 	cp -r "$builddir/firmware/skl_hda_dsp_generic-tplg.bin" "$pkgdir/lib/firmware/postmarketos"
 }
 
 sha512sums="
-a1a4a9d27b8de268f65f81445d93634901c98c8b07f838aa97011801208324b13d58d6d09e4cc271c69f98063128baa5738ad66c5c06f7c8b840d9728b76ea5e  linux-mecha-firmware.tar.gz
+399dc16aad7c1cb09cc0da1c324fcc38580488952fba368b97d33ed577a29be53ed3d4d9dcacbd4c8368cb7e5e97fc771779a1f68b73c1e4723a83ff0f22dd57  linux-mecha-firmware.tar.gz
 "
