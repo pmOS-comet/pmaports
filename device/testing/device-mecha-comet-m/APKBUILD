@@ -41,7 +41,6 @@ subpackages="
 	$pkgname-audio
 	$pkgname-openrc
 	$pkgname-tinydm
-	$pkgname-x11
 "
 
 replaces="alsa-ucm-conf"
@@ -68,12 +67,6 @@ openrc() {
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 
 	mkdir -p "$subpkgdir"
-}
-
-x11() {
-	install_if="$pkgname xorg-server"
-	install -Dm644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/10-video.conf
 }
 
 package() {
