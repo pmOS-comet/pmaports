@@ -13,26 +13,11 @@ builddir="$srcdir/linux-mecha-firmware-$_fw_ver"
 package() {
 	mkdir -p "$pkgdir/lib/firmware/postmarketos"
 
+	echo "Installing Broadcom firmware"
 	# Broadcom firmware
-	install -Dm644 "$builddir/firmware/brcm/BCM4345C0.1MW.hcd" \
-		"$pkgdir"/lib/firmware/postmarketos/BCM4345C0.1MW.hcd
-	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.bin" \
-                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.bin
-	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.bin"	\
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.bin
-	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.txt" \
-                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.txt
-	install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.clm_blob" \
-                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.clm_blob
-        install -Dm644 "$builddir/firmware/brcm/brcmfmac43455-sdio.clm_blob" \
-                "$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43455-sdio.fsl,imx8mm-evk.clm_blob
+	cp -r "$builddir/firmware/brcm" "$pkgdir/lib/firmware/postmarketos"
 
-	# Regulatory Databases
-	install -Dm644 "$builddir/firmware/brcm/regulatory.db" \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/regulatory.db
-	install -Dm644 "$builddir/firmware/brcm/regulatory.db.p7s" \ 
-                "$pkgdir"/lib/firmware/postmarketos/brcm/regulatory.db.p7s
-
+	echo "Installing NXP firmware"
 	# NXP firmware
 	cp -r "$builddir/firmware/nxp" "$pkgdir/lib/firmware/postmarketos"
 
@@ -40,7 +25,11 @@ package() {
 	# cp -r "$builddir/firmware/imx" "$pkgdir/lib/firmware/postmarketos"
 
 	# HDA firmware
-	cp -r "$builddir/firmware/skl_hda_dsp_generic-tplg.bin" "$pkgdir/lib/firmware/postmarketos"
+	echo "Installing HDA firmware"
+	install -Dm644 "$builddir/firmware/skl_hda_dsp_generic-tplg.bin" \
+		"$pkgdir"/lib/firmware/postmarketos/skl_hda_dsp_generic-tplg.bin
+
+	echo "Done"
 }
 
 sha512sums="
