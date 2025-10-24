@@ -27,7 +27,7 @@ makedepends="
 install="$pkgname.post-upgrade"
 
 # Source
-_repository="linux-imx"
+_repository="linux"
 _config="config-$_flavor.$arch"
 _tag="postmarketOS-devel-20251023-gen6"
 
