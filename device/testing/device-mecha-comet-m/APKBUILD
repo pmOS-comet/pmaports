@@ -14,7 +14,6 @@ depends="
 	gnss-share
 	i2c-tools
 	iw
-	mesa-egl
 	snapshot
 	postprocessd
 	linux-mecha-comet-m
@@ -27,7 +26,6 @@ depends="
 makedepends="devicepkg-dev u-boot-tools"
 source="
 	flash_script.lst
-	graphics/00-mesa.sh
 	graphics/70-comet-xwayland-accel.sh
 	audio/asound.conf
 	bluetooth/mc-brcm-bt-enable.initd
@@ -70,7 +68,6 @@ openrc() {
 }
 
 package() {
-	install -D -m755 "$srcdir"/00-mesa.sh "$pkgdir"/etc/profile.d/00-mesa.sh
 	install -D -m644 "$srcdir"/flash_script.lst "$pkgdir"/usr/share/uuu/flash_script.lst
 	install -D -m644 "$srcdir"/10-imx.rules "$pkgdir"/usr/lib/udev/rules.d/10-imx.rules
 	install -Dm755 "$srcdir"/mc-brcm-bt-enable.initd \
@@ -82,12 +79,11 @@ package() {
 }
 sha512sums="
 7171a761666a3186e7a810d3efb32acf3b7dc89e9dc8aeff1f69e4da5584ef1c94015c38407be75d7c9a726e0ac6079d80e38904154b9dfeb01f8cee66d4af8f  flash_script.lst
-2e72d9a084ecd6c96cafbbd8fda461ae8b2ebd14ffda601d9f36d73f08f04088213de17da078293ddd958d4c76d33148c7af6e252eb0709f6934855a55578509  00-mesa.sh
 fad386071fc45f9880a94cc8004fabd5d98b3e6a12606c98d8e72e0208f22ab54f03b921f5967a959782507e2bff67d2fa92e46d8cd242011a3afcdbda529279  70-comet-xwayland-accel.sh
 8f228acf1767be8e74755ba8e319c9a40a0d9749a04eb5748d353361807c3ba411eae2291ff87aafaf64eb64087072ad92805b7c73c3e606bdb3334492e5ab71  asound.conf
 2cd08f115581cb691465e1f8103cfb9776aef860cce9640003b6efda9aaa5d4b7522e6ea5343fc2d48d59101cf3226dd5351fc92d1192320607368d98408f1f6  mc-brcm-bt-enable.initd
 480adc0b9d034c9ec75fe37bf288a3fc7167bd52dba1c725178c83da7da454f08e2aab8e2b2bd373e1a0672ad91c1e20f3b8224ae6cdfae50b32d03a3072e129  mc-brcm-bt-enable.service
 65a233cbd917733aa09736e7cc81c7cc6e5ce56b0ca764ae245ee94b3773860d55f685959b49564d9010a88963738d41e062746c0c6c9dd5602ac92f45771a7f  10-imx.rules
-8915788693ceea26b720ac59df4fa78fcbff12b530ef33864bf0f29f8db42308db303ce4d981ea7e0aaa24eebab293b24b8dd1db79d961f1e477216a26d3c08f  deviceinfo
+cc36714726cb6580127a2d3eeb07f50feb124410b9cafed5d4db4edeac212a0f7ad098592998bba9dbb5c6cdc9ecc33fb1555e189768d1684e5ff1c0194bb583  deviceinfo
 e70bae17df23dcaaaea0e2d3616556f04baa23f8ee1357785c0f539bf97282d8ddff53953e155b72689bb73beb38c2da3d08de2a61e866684edfa10a6593885d  modules-initfs
 "
