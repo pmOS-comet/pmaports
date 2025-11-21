@@ -74,10 +74,10 @@ prepare() {
 build() {
 	msg "Building ARM trusted firmware"
 	cd "$_atf_builddir"
-	LDFLAGS="-no-warn-rwx-segment" make PLAT=imx8mp bl31
+	LDFLAGS="-no-warn-rwx-segment" make PLAT=imx8mp BUILD_BASE=build-optee SPD=opteed bl31
 	# Overwrite default bl31 binary with one made here
-	export BL31="$_atf_builddir/build/imx8mp/release/bl31.bin"
-	cp -v "$_atf_builddir"/build/imx8mp/release/bl31.bin "$builddir"/
+	export BL31="$_atf_builddir/build-optee/imx8mp/release/bl31.bin"
+	cp -v "$_atf_builddir"/build-optee/imx8mp/release/bl31.bin "$builddir"/
 
 	# Buld OP-TEE
 	msg "Building OP-TEE"
@@ -85,6 +85,7 @@ build() {
 	make -j$(nproc --all) PLATFORM=imx-mx8mpevk LDFLAGS= \
 		CROSS_COMPILE=aarch64-alpine-linux-musl- \
 		CROSS_COMPILE64=aarch64-alpine-linux-musl- \
+		CFG_TEE_TA_LOG_LEVEL=0 CFG_TEE_CORE_LOG_LEVEL=0 \
 		O=build.imx-mx8mpevk
 
 	# Phone uboot firmware
@@ -100,7 +101,7 @@ build() {
 	cp "$builddir"/arch/arm/dts/imx8mp-mecha-comet.dtb "$_imxmkimage_dir"/iMX8M/imx8mp-mecha-comet.dtb
         cp "$builddir"/arch/arm/dts/imx8mp-mecha-comet.dtb "$_imxmkimage_dir"/iMX8M/imx8mp-mecha-comet-evk.dtb
 	install -Dm755 "$builddir"/tools/mkimage "$_imxmkimage_dir"/iMX8M/mkimage_uboot
-	cp "$_atf_builddir"/build/imx8mp/release/bl31.bin "$_imxmkimage_dir"/iMX8M/bl31.bin
+	cp "$_atf_builddir"/build-optee/imx8mp/release/bl31.bin "$_imxmkimage_dir"/iMX8M/bl31.bin
 	cp "$_optee_dir"/build.imx-mx8mpevk/core/tee-raw.bin "$_imxmkimage_dir"/iMX8M/tee.bin
         cp -v "$_firmware_builddir"/firmware/ddr/synopsys/lpddr4*.bin "$_imxmkimage_dir"/iMX8M/
         cp -v "$_firmware_builddir"/firmware/hdmi/cadence/signed_*imx8m.bin "$_imxmkimage_dir"/iMX8M/
@@ -113,8 +114,8 @@ build() {
 }
 
 package() {
-	install -D -m644 "$_optee_dir"/build.imx-mx8mpevk/core/tee.bin \
-		"$pkgdir/usr/lib/firmware/tee.bin"
+        install -D -m644 "$_optee_dir"/build.imx-mx8mpevk/core/tee.bin \
+               "$pkgdir/usr/lib/firmware/tee.bin"
         install -D -m644 "$_optee_dir"/build.imx-mx8mpevk/core/tee.bin \
                 "$pkgdir/usr/lib/firmware/tee-raw.bin"
         install -D -m644 "$_optee_dir"/build.imx-mx8mpevk/core/tee.bin \
@@ -125,8 +126,8 @@ package() {
                 "$pkgdir/usr/lib/firmware/tee-pager_v2.bin"
 
         install -d "$pkgdir/usr/lib/optee_armtz/"
-	install -m444 "$_optee_dir"/build.imx-mx8mpevk/ta/*/*.ta \
-		"$pkgdir/usr/lib/optee_armtz/"
+        install -m444 "$_optee_dir"/build.imx-mx8mpevk/ta/*/*.ta \
+                "$pkgdir/usr/lib/optee_armtz/"
 
 	install -D -m644 "$builddir"/phone-boot.img \
 		"$pkgdir/usr/share/u-boot/comet-m/phone-boot.img"
@@ -136,7 +137,7 @@ package() {
 		"$pkgdir"/usr/sbin/update-u-boot
 }
 sha512sums="
-a5b00767fa5f025740c117866e3510dd6c87dc8ccc52d2ed965cad283931d81adaafb822f48e2d2d6b81330cc43b7bfe9cd49adf79445139e0562d900837f613  u-boot-imx-mecha-comet.tar.gz
+f2b3bb243d364aac1d198c0cee4d302d3827f1de2b2411e22bf3baf50ff25b923dd8e1b4803b3abe50f93bddcf50170b768f7393472d4cfd2fccc6e5db4e4392  u-boot-imx-mecha-comet.tar.gz
 2e35323b80feb392e19f127b077c21439f77cf7f67d963a7d64eb72bbfe9de4ec950f3265e175016254b4716536a08e9faa75e504ae3cd91ffb891304d13ca72  arm-trusted-firmware-1b27ee3edbb40ef9432c69ccaa744d1ac5d54c5d.tar.gz
 23a16cb6ad68a3b7d0079e42d252d7413b626c16c42c4e9ea2fcc889675a8f3bf44ac86f09f3c8a880f69d5c0d8eff53ab039b3b48c388d5c27725118ebe7cf4  imx_mkimage-lf-6.6.52-2.2.0.tar.gz
 0f13c7bf1a8183ac656a6d8979dec82f1b5e782748c52a18d23674bdf7ac446ae5c315ebbfdfe56d3fd11f9a6d1362164bcf38170d9dbe832f8497fbd4335eb7  imx-optee-os-lf-6.6.52_2.2.0.tar.gz

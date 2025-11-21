@@ -29,7 +29,7 @@ install="$pkgname.post-upgrade"
 # Source
 _repository="linux"
 _config="config-$_flavor.$arch"
-_tag="postmarketOS-devel-20251024-gen6"
+_tag="postmarketOS-devel-20251119-gen6-hotfix1"
 
 source="
 	$pkgname-linux-$pkgver.tar.gz::"$url/archive/refs/tags/$_tag.tar.gz"
@@ -60,6 +60,6 @@ package() {
 
 }
 sha512sums="
-83f15571a20b8e12a064ea4e34c987744179b96d3fb678e104cf598a0945190114190dcf5c2b24e09f679ac855582ec12c3787fe78f1dfad3ec14f33aa3b0d9d  linux-mecha-comet-m-linux-6.6.52.tar.gz
-f3d4b4a66003b2d3e68fd41d46f7b12ecffa0c025fe779bff9a9bb2071aa6c900900b123a7bc6128b8e90e60deb8af777b8eb59131dac731ea0f84a2ed48ed4f  config-mecha-comet-m.aarch64
+2d733062c2f9d6d27da89d690355a9ffbdb8e5df98210feecf3d34df6e7ce95048d4bda6421c956d7a47cd440bcc8477fa3ffea24a0863e0326b7f1f5f861053  linux-mecha-comet-m-linux-6.6.52.tar.gz
+a935a17282e1a74a68d97237921d23540722bee9f871fe254cd82fea2d0f86870da84bb735f7cbc2a1c81c67936ecb6c5350df7a18928fb7997c07be0a46ec57  config-mecha-comet-m.aarch64
 "
