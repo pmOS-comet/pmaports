@@ -10,7 +10,6 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	bluez
-	bluez-deprecated
 	gnss-share
 	i2c-tools
 	iw
@@ -26,11 +25,11 @@ depends="
 makedepends="devicepkg-dev u-boot-tools"
 source="
 	flash_script.lst
-	graphics/70-comet-xwayland-accel.sh
-	audio/asound.conf
-	bluetooth/mc-brcm-bt-enable.initd
-	bluetooth/mc-brcm-bt-enable.service
+	audio/HiFi.conf
+	audio/comet.conf
+	kernel/moal.conf
 	udev/10-imx.rules
+	wifi/10-nm-wifi.rules
 	deviceinfo
 	modules-initfs
 "
@@ -38,7 +37,6 @@ source="
 subpackages="
 	$pkgname-audio
 	$pkgname-openrc
-	$pkgname-tinydm
 "
 
 replaces="alsa-ucm-conf"
@@ -49,15 +47,14 @@ build() {
 
 audio() {
 	pkgdesc="Audio support for Mecha Comet"
-	install_if="$pkgname pulseaudio"
-	install -D -m644 "$srcdir"/asound.conf "$subpkgdir"/etc/asound.conf
-}
-
-tinydm() {
-	pkgdesc="Tinydm config for the Mecha Comet"
-	install_if="$pkgname tinydm"
-	install -Dm755 "$srcdir"/70-comet-xwayland-accel.sh \
-		"$subpkgdir"/etc/tinydm.d/env-wayland.d/70-comet-xwayland-accel.sh
+	install -Dm755 "$srcdir"/HiFi.conf \
+		"$subpkgdir"/usr/share/alsa/ucm2/Mecha/Comet/HiFi.conf
+	install -Dm755 "$srcdir"/comet.conf \
+		"$subpkgdir"/usr/share/alsa/ucm2/Mecha/Comet/comet.conf
+	# Build symlinks
+	mkdir -p "$subpkgdir"/usr/share/alsa/ucm2/conf.d/simple-card/
+	cd "$subpkgdir"/usr/share/alsa/ucm2/conf.d/simple-card/
+	ln -s ../../Mecha/Comet/comet.conf mecha-MechaComet.conf
 }
 
 openrc() {
@@ -68,22 +65,25 @@ openrc() {
 }
 
 package() {
-	install -D -m644 "$srcdir"/flash_script.lst "$pkgdir"/usr/share/uuu/flash_script.lst
-	install -D -m644 "$srcdir"/10-imx.rules "$pkgdir"/usr/lib/udev/rules.d/10-imx.rules
-	install -Dm755 "$srcdir"/mc-brcm-bt-enable.initd \
-		"$pkgdir"/etc/init.d/mc-brcm-bt-enable
-        install -Dm644 "$srcdir"/mc-brcm-bt-enable.service -t \
-                "$pkgdir"/usr/lib/systemd/system
+	# Install polkit and udev rules
+        install -Dm644 "$srcdir"/10-imx.rules "$pkgdir"/usr/lib/udev/rules.d/10-imx.rules
+        install -Dm644 "$srcdir"/10-nm-wifi.rules "$pkgdir"/etc/polkit-1/rules.d/10-nm-wifi.rules
+
+	# Install modules config
+	install -Dm644 "$srcdir"/moal.conf "$pkgdir"/etc/modules-load.d/moal.conf
+
+	# Setup flash script
+	install -Dm644 "$srcdir"/flash_script.lst "$pkgdir"/usr/share/uuu/flash_script.lst
 
 	devicepkg_package $startdir $pkgname
 }
 sha512sums="
 7171a761666a3186e7a810d3efb32acf3b7dc89e9dc8aeff1f69e4da5584ef1c94015c38407be75d7c9a726e0ac6079d80e38904154b9dfeb01f8cee66d4af8f  flash_script.lst
-fad386071fc45f9880a94cc8004fabd5d98b3e6a12606c98d8e72e0208f22ab54f03b921f5967a959782507e2bff67d2fa92e46d8cd242011a3afcdbda529279  70-comet-xwayland-accel.sh
-8f228acf1767be8e74755ba8e319c9a40a0d9749a04eb5748d353361807c3ba411eae2291ff87aafaf64eb64087072ad92805b7c73c3e606bdb3334492e5ab71  asound.conf
-2cd08f115581cb691465e1f8103cfb9776aef860cce9640003b6efda9aaa5d4b7522e6ea5343fc2d48d59101cf3226dd5351fc92d1192320607368d98408f1f6  mc-brcm-bt-enable.initd
-480adc0b9d034c9ec75fe37bf288a3fc7167bd52dba1c725178c83da7da454f08e2aab8e2b2bd373e1a0672ad91c1e20f3b8224ae6cdfae50b32d03a3072e129  mc-brcm-bt-enable.service
+893e61436d138e687fa13491832d78ab6f99b1d0184199382f9b577bc38598c9ad85c8bb4ce36752716f355e2cbf5c0ffe9a1d80341dac476435162b07d51220  HiFi.conf
+8d06fec98f64994ee6b06890ab2d49df3dc73d0d7c80058c0ab951483b996ba7412b5c730049a3bbdc48f5d9402e65295eaf18322d10973ed983d23dc39ee20f  comet.conf
+bac584f5c2d7dc2cc4359137644b78aef0df9bfcf7f144743c5d223761c82eb93e9a253d2347858fe7962545d9a322b992c9219365413d043514ca34cafc48d9  moal.conf
 65a233cbd917733aa09736e7cc81c7cc6e5ce56b0ca764ae245ee94b3773860d55f685959b49564d9010a88963738d41e062746c0c6c9dd5602ac92f45771a7f  10-imx.rules
-cc36714726cb6580127a2d3eeb07f50feb124410b9cafed5d4db4edeac212a0f7ad098592998bba9dbb5c6cdc9ecc33fb1555e189768d1684e5ff1c0194bb583  deviceinfo
+d1bfdd200d62a5c75fa870fc759d5212413bada5f69ddb9464ce2240afaf2ab5b9a9259236c41dcfadfb97c223b5d8f6cffe1389d795535c052f6a441d6cc8f4  10-nm-wifi.rules
+2e63ef949081f36665c159acd67e7c87d3c6f31478341454448f03a5faa50542c53056334149dfc771c595827371857c894e76099f20a74497fc5441d5da3cc9  deviceinfo
 e70bae17df23dcaaaea0e2d3616556f04baa23f8ee1357785c0f539bf97282d8ddff53953e155b72689bb73beb38c2da3d08de2a61e866684edfa10a6593885d  modules-initfs
 "

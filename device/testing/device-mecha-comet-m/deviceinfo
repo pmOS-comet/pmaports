@@ -19,7 +19,7 @@ deviceinfo_external_storage="true"
 deviceinfo_keyboard="false"
 
 # Bootloader related
-deviceinfo_flash_method="none"
+deviceinfo_flash_method="uuu"
 deviceinfo_generate_legacy_uboot_initfs="false"
 deviceinfo_sd_embed_firmware="u-boot/comet-m/phone-boot.img:66"
 deviceinfo_boot_part_start="16384"
