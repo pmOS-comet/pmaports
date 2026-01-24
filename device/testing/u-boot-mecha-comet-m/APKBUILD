@@ -5,7 +5,7 @@ pkgrel=1
 _uboot_ver="imx-2025.04.y"
 # IMX-ATF release
 _atf_url="https://github.com/nxp-imx/imx-atf"
-_atf_commit="a266ff458c2526a6474036a5c6648be6fdc54fe3"
+_atf_branch="lf_v2.12"
 # IMX-mkimage release
 # TODO: move to upstream imx-mkimage
 _imxmkimage_url="https://github.com/pmOS-comet/imx-mkimage" 
@@ -41,7 +41,7 @@ makedepends="
 options="!check !tracedeps pmb:cross-native"
 source="
 	u-boot-$_uboot_ver.tar.gz::$url/archive/refs/heads/$_uboot_ver.tar.gz
-	arm-trusted-firmware-$_atf_commit.tar.gz::$_atf_url/archive/$_atf_commit.tar.gz
+	arm-trusted-firmware-$_atf_branch.tar.gz::$_atf_url/archive/refs/heads/$_atf_branch.tar.gz
 	imx_mkimage-$_imxmkimage_branch.tar.gz::$_imxmkimage_url/archive/refs/heads/$_imxmkimage_branch.tar.gz
 	imx-optee-os-$_optee_branch.tar.gz::$_optee_url/archive/refs/heads/$_optee_branch.tar.gz
 	https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-$_firmwareversion.bin
@@ -49,7 +49,7 @@ source="
 	"
 install="$pkgname.post-upgrade"
 
-_atf_builddir="$srcdir/imx-atf-$_atf_commit"
+_atf_builddir="$srcdir/imx-atf-$_atf_branch"
 _firmware_builddir="$srcdir/firmware-imx-$_firmwareversion"
 _imxmkimage_dir="$srcdir/imx-mkimage-$_imxmkimage_branch"
 _optee_dir="$srcdir/imx-optee-os-$_optee_branch"
@@ -139,7 +139,7 @@ package() {
 }
 sha512sums="
 5a3176f2cc1e54568f8d6e924ac0c5e5b5502cdb8f129017e5afdccde7859d52cf7c72ebb9715d87ed4ce10948b1c268804dcde7162ab700e0180079a1177cd0  u-boot-imx-2025.04.y.tar.gz
-2899950a02562ca5749589442984822b96dabeea6094583d88c3c2046ea89b4bc572034cf2f0003eec1bce9b266f3f119b39f517b1a80f4d26d26b3a35cd8b49  arm-trusted-firmware-a266ff458c2526a6474036a5c6648be6fdc54fe3.tar.gz
+445a39d4b1ed609b49ae8d2a892707953c98b287fc9f775a0a94859a73f21681d0ea5f3c71c02964e5d9f90e3178e5a2fb40bd07e3325a57331eb136d133e359  arm-trusted-firmware-lf_v2.12.tar.gz
 af2c0192e584a781b8b1de7643048ef6ac2997a4b0181de9a7d0d06e82ac380e2765cd048f899d443aa70321fc1525e146ff62191e60d894a60fc0cde020779d  imx_mkimage-lf-6.12.20_2.0.0.tar.gz
 8c14da5e5d74d6525fcaa68f946fb50e550e82fefc3ed6060db471f566c6156714348b5f1caf7819699e77799a3a3de411e097e449c94eaa32f83f1442f3139c  imx-optee-os-lf-6.12.49_2.2.0.tar.gz
 332c5856dd219c076c903818227accbbaffe4b9fd0d54605e7a9d4f7c8dc5ed38285e1e65df055d1f7e3d297a48b286688bd7c4152d1d745bdb3cefd86c6a38f  firmware-imx-8.26-d4c33ab.bin
