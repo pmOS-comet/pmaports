@@ -1,5 +1,5 @@
 pkgname=linux-mecha-comet-m
-pkgver=6.6.52
+pkgver=6.12.20
 pkgrel=0
 # NOTE: Don't forget to rebase the config! See prepare() for instructions.
 pkgdesc="Mecha Comet M kernel fork"
@@ -29,7 +29,7 @@ install="$pkgname.post-upgrade"
 # Source
 _repository="linux"
 _config="config-$_flavor.$arch"
-_tag="postmarketOS-devel-20251119-gen6-hotfix1"
+_tag="pmOS-linux-6.12.20-20260124"
 
 source="
 	$pkgname-linux-$pkgver.tar.gz::"$url/archive/refs/tags/$_tag.tar.gz"
@@ -60,6 +60,6 @@ package() {
 
 }
 sha512sums="
-2d733062c2f9d6d27da89d690355a9ffbdb8e5df98210feecf3d34df6e7ce95048d4bda6421c956d7a47cd440bcc8477fa3ffea24a0863e0326b7f1f5f861053  linux-mecha-comet-m-linux-6.6.52.tar.gz
-a935a17282e1a74a68d97237921d23540722bee9f871fe254cd82fea2d0f86870da84bb735f7cbc2a1c81c67936ecb6c5350df7a18928fb7997c07be0a46ec57  config-mecha-comet-m.aarch64
+2b486f5bbfc84d66a1edc19e24388ba5f7217973205b23a9c62d1faebfe182d7e544e410539328b61609e4cc8e7c0b0fd64e1e1a7e478c1014b462dab3026e3a  linux-mecha-comet-m-linux-6.12.20.tar.gz
+257ab1dba43dac37c15f1a9c764007a5a88a5ba1dc2f27946feadef87d2f49cfa04e0ed13076b3bea8cc24095d692b648b85b50f006db4def5def81c8d849893  config-mecha-comet-m.aarch64
 "
