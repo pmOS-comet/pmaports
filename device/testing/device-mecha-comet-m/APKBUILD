@@ -8,25 +8,23 @@ license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
-	alsa-ucm-conf
+	alsa-ucm-conf-mecha-comet
 	bluez
+	firmware-nxp-iw61x
 	gnss-share
 	i2c-tools
 	iw
-	snapshot
+        linux-mecha-comet-m
+	postmarketos-base
 	postprocessd
-	linux-mecha-comet-m
+	snapshot
+	systemd-boot
 	u-boot-mecha-comet-m
 	u-boot-tools
-	firmware-mecha-comet-m
-	postmarketos-base
-	systemd-boot
 "
 makedepends="devicepkg-dev u-boot-tools"
 source="
 	flash_script.lst
-	audio/HiFi.conf
-	audio/comet.conf
 	kernel/moal.conf
 	udev/10-imx.rules
 	wifi/10-nm-wifi.rules
@@ -34,34 +32,8 @@ source="
 	modules-initfs
 "
 
-subpackages="
-	$pkgname-audio
-	$pkgname-openrc
-"
-
-replaces="alsa-ucm-conf"
-
 build() {
 	devicepkg_build $startdir $pkgname
-}
-
-audio() {
-	pkgdesc="Audio support for Mecha Comet"
-	install -Dm755 "$srcdir"/HiFi.conf \
-		"$subpkgdir"/usr/share/alsa/ucm2/Mecha/Comet/HiFi.conf
-	install -Dm755 "$srcdir"/comet.conf \
-		"$subpkgdir"/usr/share/alsa/ucm2/Mecha/Comet/comet.conf
-	# Build symlinks
-	mkdir -p "$subpkgdir"/usr/share/alsa/ucm2/conf.d/simple-card/
-	cd "$subpkgdir"/usr/share/alsa/ucm2/conf.d/simple-card/
-	ln -s ../../Mecha/Comet/comet.conf mecha-MechaComet.conf
-}
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-
-	mkdir -p "$subpkgdir"
 }
 
 package() {
@@ -79,11 +51,9 @@ package() {
 }
 sha512sums="
 7171a761666a3186e7a810d3efb32acf3b7dc89e9dc8aeff1f69e4da5584ef1c94015c38407be75d7c9a726e0ac6079d80e38904154b9dfeb01f8cee66d4af8f  flash_script.lst
-893e61436d138e687fa13491832d78ab6f99b1d0184199382f9b577bc38598c9ad85c8bb4ce36752716f355e2cbf5c0ffe9a1d80341dac476435162b07d51220  HiFi.conf
-8d06fec98f64994ee6b06890ab2d49df3dc73d0d7c80058c0ab951483b996ba7412b5c730049a3bbdc48f5d9402e65295eaf18322d10973ed983d23dc39ee20f  comet.conf
 bac584f5c2d7dc2cc4359137644b78aef0df9bfcf7f144743c5d223761c82eb93e9a253d2347858fe7962545d9a322b992c9219365413d043514ca34cafc48d9  moal.conf
 65a233cbd917733aa09736e7cc81c7cc6e5ce56b0ca764ae245ee94b3773860d55f685959b49564d9010a88963738d41e062746c0c6c9dd5602ac92f45771a7f  10-imx.rules
 d1bfdd200d62a5c75fa870fc759d5212413bada5f69ddb9464ce2240afaf2ab5b9a9259236c41dcfadfb97c223b5d8f6cffe1389d795535c052f6a441d6cc8f4  10-nm-wifi.rules
-2e63ef949081f36665c159acd67e7c87d3c6f31478341454448f03a5faa50542c53056334149dfc771c595827371857c894e76099f20a74497fc5441d5da3cc9  deviceinfo
-e70bae17df23dcaaaea0e2d3616556f04baa23f8ee1357785c0f539bf97282d8ddff53953e155b72689bb73beb38c2da3d08de2a61e866684edfa10a6593885d  modules-initfs
+f53f2089c10eec843135dd55d635254dece9ffc1259e570594fbab21c98d4b395363140fa6ca9a5db50fe903abd81e38593bc58329a62a599eb4a91253a7619b  deviceinfo
+2b1048306bf4b293d28d2e5f48fa471f500c228e3bab28e569d0bba13df1912abdde412438b5490cd662bd1a6503d6c3dd7a9c7e831cc734c869368a112ed6b8  modules-initfs
 "
