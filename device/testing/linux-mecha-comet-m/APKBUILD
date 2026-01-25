@@ -29,13 +29,13 @@ install="$pkgname.post-upgrade"
 # Source
 _repository="linux"
 _config="config-$_flavor.$arch"
-_tag="pmOS-linux-6.12.20-20260124"
+_commit="7f554a2bb90ce3ab382e68bf05b369fcfe50caa3"
 
 source="
-	$pkgname-linux-$pkgver.tar.gz::"$url/archive/refs/tags/$_tag.tar.gz"
+	$pkgname-linux-$pkgver.tar.gz::"$url/archive/$_commit.tar.gz"
 	$_config
 "
-builddir="$srcdir/$_repository-$_tag"
+builddir="$srcdir/$_repository-$_commit"
 
 prepare() {
 	default_prepare
@@ -60,6 +60,6 @@ package() {
 
 }
 sha512sums="
-2b486f5bbfc84d66a1edc19e24388ba5f7217973205b23a9c62d1faebfe182d7e544e410539328b61609e4cc8e7c0b0fd64e1e1a7e478c1014b462dab3026e3a  linux-mecha-comet-m-linux-6.12.20.tar.gz
-257ab1dba43dac37c15f1a9c764007a5a88a5ba1dc2f27946feadef87d2f49cfa04e0ed13076b3bea8cc24095d692b648b85b50f006db4def5def81c8d849893  config-mecha-comet-m.aarch64
+b4b3a85967d86fab4316550270438f54f2fa138d2b90884c4da22bd2a3d89a9dba535a91b6f8de93f5f75ca0dc23ea583c80e83cd340d18aec87d64a94086fcb  linux-mecha-comet-m-linux-6.12.20.tar.gz
+3d65266a0d73d14c4b20f619a00666f5645fa427957554dada08d0ccedcd8aa7d75475684d86e6b21d4f791031825121b4590ebc89da0af8956b998c7e7f0367  config-mecha-comet-m.aarch64
 "
