@@ -1,0 +1,26 @@
+maintainer="Gagan Malvi <gagan@ersa.dev>"
+pkgname=alsa-ucm-conf-mecha-comet
+pkgver=1.2.6_git20260125
+pkgrel=0
+pkgdesc="ALSA UCM configuration for Mecha Comet"
+url="https://github.com/pmOS-comet/alsa-ucm-conf"
+arch="aarch64"
+license="BSD-3-Clause"
+provides="alsa-ucm-conf"
+provider_priority=1
+_commit="619cac77aa0857c6f8f64c2061a852d2b9bb3c99"
+source="
+	$pkgname-$_commit.tar.gz::$url/archive/$_commit.tar.gz
+"
+builddir="$srcdir/alsa-ucm-conf-$_commit"
+options="!check"
+
+package() {
+	# install audio config files
+	mkdir -p "$pkgdir"/usr/share/alsa/ucm2
+	cp -r "$srcdir/alsa-ucm-conf-$_commit"/ucm2 "$pkgdir"/usr/share/alsa/
+}
+
+sha512sums="
+9d46cd04fef11cf66e66f2832e93c346952aa690982ee692f0b8181719896878909857cdc0de381d88d74dd371a0dae51ec292fd07527b6f398ada50c403fd62  alsa-ucm-conf-mecha-comet-619cac77aa0857c6f8f64c2061a852d2b9bb3c99.tar.gz
+"
