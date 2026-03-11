@@ -6,3 +6,5 @@ fuse
 pwm_vibra
 usb_storage
 uas
+dm-verity
+
